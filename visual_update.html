@@ -45,7 +45,7 @@
                 html: '<input type="text" name="participant_id" required>',
                 on_finish: function(data){
                     try{
-                        if(data.responses && data.responses ! =="undefind"){
+                        if(data.responses && data.responses !=="undefind"){
                            const responses = JSON.parse(data.responses);
                             if(responses.participant_id){
                                  jsPsych.data.addProperties({ participant_id: responses.participant_id });
