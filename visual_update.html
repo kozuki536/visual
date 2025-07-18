@@ -44,19 +44,8 @@
                 preamble: '<p>IDを入力してください</p>',
                 html: '<input type="text" name="participant_id" required>',
                 on_finish: function(data){
-                    try{
-                        if(data.responses && data.responses !=="undefined"){
-                           const responses = JSON.parse(data.responses);
-                            if(responses.participant_id){
-                                 jsPsych.data.addProperties({ participant_id: responses.participant_id });
-                            }
-                        }else{
-                            console.warn("data.responses が無効です:",data.responses);
-                        }
-                    }catch(e){
-                        console.error("ID入力処理でエラー:",e);
-                    }
-                    
+                    const responses = JSON.parse(data.responses);
+                     jsPsych.data.addProperties({ participant_id: responses.participant_id });
                 }
             };
             timeline.push(get_id);
