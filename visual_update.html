@@ -44,8 +44,8 @@
                 preamble: '<p>IDを入力してください</p>',
                 html: '<input type="text" name="participant_id" required>',
                 on_finish: function(data){
-                    const responses = JSON.parse(data.response);
-                     jsPsych.data.addProperties({ participant_id: responses.participant_id });
+                    const responses = data.response;
+                    jsPsych.data.addProperties({ participant_id: responses.participant_id });
                 }
             };
             timeline.push(get_id);
