@@ -35,11 +35,11 @@
             });
 
             const subject_id = jsPsych.randomization.randomID(10);
-            const filename = `${subject_id}.csv`;
+            //const filename = `${subject_id}.csv`;
 
             const timeline =[]
 
-            /*const get_id = {
+            const get_id = {
                 type : jsPsychSurveyHtmlForm,
                 preamble: '<p>IDを入力してください</p>',
                 html: '<input type="text" name="participant_id" required>',
@@ -48,7 +48,7 @@
                     jsPsych.data.addProperties({ participant_id: responses.participant_id });
                 }
             };
-            timeline.push(get_id);*/
+            timeline.push(get_id);
 
             /* preload images */
             const preload = {
@@ -185,10 +185,10 @@
                 type : jsPsychPipe,
                 action : "save",
                 experiment_id : "6VlTDkZAkqjx", //自分のID？入れる
-                filename : filename ,/*() => {
+                filename : () => {
                     const id = jsPsych.data.get().values()[0].participant_id || jsPsych.randomization.randomID(10);
                     return `${id}.csv`;
-                },*/
+                },
                 data_string : ()=>jsPsych.data.get().csv()
              };
              timeline.push(save_data);
