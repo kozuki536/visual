@@ -96,7 +96,6 @@
             });
             
             /* fixation cross with background */
-            document.querySelector('#jspsych-target').style.cursor = 'none'; //カーソルを非表示
 
             function FixationStimulus(){
                 const px_per_deg = jsPsych.data.get().filter({trial_type:"virtual-chinrest"}).values[0]?.px_per_unit || 50;
