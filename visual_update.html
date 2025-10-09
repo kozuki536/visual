@@ -14,7 +14,7 @@
             body{
                 background-color: black;
                 color: white;
-                cursor: none; /* カーソルを非表示 */
+                /*cursor: none;カーソルを非表示 */
             }
             .stimulus-container{
                 position: relative;
@@ -45,7 +45,6 @@
             /*ID入力*/
             const get_id = {
                 type : jsPsychSurveyHtmlForm,
-                css_classes: ['show-cursor'], /*カーソルを表示*/
                 preamble: '<p>IDを入力してください</p>',
                 html: '<input type="text" name="participant_id" required>',
                 on_finish: function(data){
@@ -63,7 +62,6 @@
                 blindspot_reps : 3,
                 resize_units : "deg",
                 pixels_per_unit : 30, //1度あたりのピクセル数
-                css_classes: ['show-cursor'], /*カーソルを表示*/
                 on_finish: function(data){
                     jsPsych.data.addProperties({
                         px_per_deg: data.px_per_unit
@@ -97,6 +95,8 @@
             });
             
             /* fixation cross with background */
+            document.querySelector('#jspsych-target').style.cursor = 'none'; //カーソルを非表示
+
             function FixationStimulus(){
                 const px_per_deg = jsPsych.data.get().filter({trial_type:"virtual-chinrest"}).values[0]?.px_per_unit || 50;
                 const sizepx = 0.5 * px_per_deg; /*先行研究が0.32度*/
