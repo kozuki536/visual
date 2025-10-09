@@ -15,7 +15,6 @@
                 background-color: black;
                 color: white;
                 cursor: none; /* カーソルを非表示 */
-
             }
             .stimulus-container{
                 position: relative;
@@ -23,6 +22,11 @@
                 height: 480px;/*6×80*/
                 margin: 0 auto;
                 background-color: rgb(153, 153, 153);
+            }
+            .background-color{
+                background-color: white;
+                color: black;
+                cursor: auto; /* カーソルを表示 */
             }
         </style>
     </head>
@@ -39,18 +43,14 @@
             //const subject_id = jsPsych.randomization.randomID(10);
             //const filename = `${subject_id}.csv`;
 
-            const timeline =[]
-
-           
+            const timeline =[];
 
             /*ID入力*/
             const get_id = {
                 type : jsPsychSurveyHtmlForm,
                 preamble: '<p>IDを入力してください</p>',
                 html: '<input type="text" name="participant_id" required>',
-                on_start: function(){
-                    document.body.style.cursor = "default"; //カーソルを表示
-                },
+                css_classes: 'background-color',
                 on_finish: function(data){
                     if(data.responses){
                         const responses = JSON.parse(data.responses);
@@ -65,16 +65,13 @@
                 type : jsPsychVirtualChinrest,
                 blindspot_reps : 3,
                 resize_units : "deg",
-                pixels_per_unit : 30, //1度あたりのピクセル数
-                on_start : function(){
-                    document.body.style.backgroundColor = "gray";
-                },
+                pixels_per_unit : 1, //1度あたりのピクセル数
+                css_classes: 'background-color',
                 on_finish: function(data){
                     jsPsych.data.addProperties({
                         px_per_deg: data.px_per_unit
                     });
-                    document.body.style.backgroundColor = "black";
-                    document.body.style.cursor = "none"; //カーソルを非表示
+                    
                 }
             };
             timeline.push(chinrest);
