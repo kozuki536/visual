@@ -18,8 +18,8 @@
             }
             .stimulus-container{
                 position: relative;
-                /*width: 640px;/*8×80(cellsize)*/
-                /*height: 480px;/*6×80*/
+                width: 640px;/*8×80(cellsize)*/
+                height: 480px;/*6×80*/
                 margin: 0 auto;
                 background-color: rgb(153, 153, 153);
             }
@@ -111,7 +111,7 @@
 
                 return`
                 <div class="stimulus-container" style="width:${width}px; height:${height}px;">
-                    <div style="font-size:${sizepx}px; color:gray; position: absolute; top: 50%; Left: 50%; transform: translate(-50%, -50%);">+</div>"
+                    <div style="font-size:${sizepx}px; color:gray; position: absolute; top: 50%; Left: 50%; transform: translate(-50%, -50%);">+</div>
                     </div>
                 `;    
             }
@@ -123,6 +123,7 @@
                 trial_duration: 1000
             };
             //timeline.push(fixation);
+            
 
             /*ノイズの追加*/
             function generateNoiseBackground(width, height, density = 0.4){
