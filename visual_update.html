@@ -101,13 +101,16 @@
             });
             
             /* fixation cross with background */
+            const scale = 0.5; /*50%に縮小*/
 
             function FixationStimulus(){
-                const px_per_deg = jsPsych.data.get().filter({trial_type:"virtual-chinrest"}).values[0]?.px_per_unit || 50;
-                const sizepx = 0.5 * px_per_deg; /*先行研究が0.32度*/
+                const px_per_deg = jsPsych.data.get().filter({trial_type:"virtual-chinrest"}).values[0]?.px_per_unit || 25;
+                const sizepx = 0.5 * px_per_deg * scale; /*先行研究が0.32度*/
+                const width = 25.39 * px_per_deg* scale;
+                const height = 19.05 * px_per_deg* scale;
 
                 return`
-                <div class="stimulus-container" style="width:${25.39*px_per_deg}px; height:${19.05*px_per_deg}px";>
+                <div class="stimulus-container" style="width:${width}px; height:${height}px;">
                     <div style="font-size:${sizepx}px; color:gray; position: absolute; top: 50%; Left: 50%; transform: translate(-50%, -50%);">+</div>"
                     </div>
                 `;    
@@ -164,9 +167,9 @@
                         const jitterSizeDeg = 0.79;
 
                         //pxに変換
-                        const stimSizePx = stimSizeDeg * px_per_deg;
-                        const cellSizePx = cellSizeDeg * px_per_deg;
-                        const jitterSizePx = jitterSizeDeg * px_per_deg;
+                        const stimSizePx = stimSizeDeg * px_per_deg* scale;
+                        const cellSizePx = cellSizeDeg * px_per_deg* scale;
+                        const jitterSizePx = jitterSizeDeg * px_per_deg* scale;
 
                         const cols = 8;//縦画面分割数
                         const rows = 6;//横画面分割数
@@ -190,8 +193,8 @@
                         const selected_positions = shuffle_positions.slice(0,16);/*16個取り出す*/
                         const targetIndex = hasTarget ? Math.floor(Math.random()*16) : -1;
 
-                        const displayWidth  = 25.39 * px_per_deg;
-                        const displayHeight = 19.04 * px_per_deg;
+                        const displayWidth  = 25.39 * px_per_deg* scale;
+                        const displayHeight = 19.04 * px_per_deg* scale;
                         const noiseBackground = generateNoiseBackground(displayWidth, displayHeight, 0.4); //ノイズ背景生成
 
                         let html = `<div class="stimulus-container" style="width:${displayWidth}px; height:${displayHeight}px; background-image:url(${noiseBackground}); background-size:cover;">`;
