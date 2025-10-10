@@ -101,7 +101,7 @@
             });
             
             /* fixation cross with background */
-            const scale = 0.8; /*80%に縮小*/
+            const scale = 0.9; /*80%に縮小*/
 
             function FixationStimulus(){
                 const px_per_deg = jsPsych.data.get().filter({trial_type:"virtual-chinrest"}).values[0]?.px_per_unit || 50;
@@ -249,3 +249,4 @@
     </body>
 
 </html>
+
