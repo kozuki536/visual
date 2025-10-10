@@ -65,7 +65,7 @@
                 type : jsPsychVirtualChinrest,
                 blindspot_reps : 3,
                 resize_units : "deg",
-                pixels_per_unit : 10, //1度あたりのピクセル数
+                pixels_per_unit : 50, //1度あたりのピクセル数
                 css_classes: 'background-color',
                 on_finish: function(data){
                     jsPsych.data.addProperties({
@@ -104,7 +104,7 @@
             const scale = 0.5; /*50%に縮小*/
 
             function FixationStimulus(){
-                const px_per_deg = jsPsych.data.get().filter({trial_type:"virtual-chinrest"}).values[0]?.px_per_unit || 10;
+                const px_per_deg = jsPsych.data.get().filter({trial_type:"virtual-chinrest"}).values[0]?.px_per_unit || 50;
                 const sizepx = 0.5 * px_per_deg * scale; /*先行研究が0.32度*/
                 const width = 25.39 * px_per_deg* scale;
                 const height = 19.05 * px_per_deg* scale;
@@ -161,7 +161,7 @@
                 timeline.push({
                     type : jsPsychHtmlKeyboardResponse,
                     stimulus : function(){
-                        const px_per_deg = jsPsych.data.get().last(1).values()[0].px_per_deg || 10;
+                        const px_per_deg = jsPsych.data.get().last(1).values()[0].px_per_deg || 50;
                         //論文の値
                         const stimSizeDeg = 0.95;
                         const cellSizeDeg = 3.17;
