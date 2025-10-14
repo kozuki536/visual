@@ -18,8 +18,8 @@
             }
             .stimulus-container{
                 position: relative;
-                width: 640px;/*8×80(cellsize)*/
-                height: 480px;/*6×80*/
+                /*width: 640px;/*8×80(cellsize)*/
+                /*height: 480px;/*6×80*/
                 margin: 0 auto;
                 background-color: rgb(153, 153, 153);
             }
@@ -101,13 +101,13 @@
             });
             
             /* fixation cross with background */
-            const scale = 0.89; /*80%に縮小*/
+            const scale = 1; /*80%に縮小*/
 
             function FixationStimulus(){
                 const px_per_deg = jsPsych.data.get().filter({trial_type:"virtual-chinrest"}).values[0]?.px_per_unit || 50;
                 const sizepx = 0.5 * px_per_deg * scale; /*先行研究が0.32度*/
-                const width = 25.39 * px_per_deg* scale;
-                const height = 19.05 * px_per_deg* scale;
+                const width = 24 * px_per_deg* scale;
+                const height = 18 * px_per_deg* scale;
 
                 return`
                 <div class="stimulus-container" style="width:${width}px; height:${height}px;">
@@ -136,7 +136,7 @@
                 for(let i = 0; i < numNoisePixels; i++){
                     const x = Math.floor(Math.random() * width);
                     const y = Math.floor(Math.random() * height);
-                    const color = 35; // 色の明るさを調整
+                    const color = 0; // 色の明るさを調整
                     ctx.fillStyle = `rgb(${color}, ${color}, ${color})`;
                     ctx.fillRect(x, y, 1, 1);
                 }
@@ -163,8 +163,8 @@
                     stimulus : function(){
                         const px_per_deg = jsPsych.data.get().last(1).values()[0].px_per_deg || 50;
                         //論文の値
-                        const stimSizeDeg = 0.95;
-                        const cellSizeDeg = 3.17;
+                        const stimSizeDeg = 0.90;
+                        const cellSizeDeg = 3;
                         const jitterSizeDeg = 0.79;
 
                         //pxに変換
@@ -194,8 +194,8 @@
                         const selected_positions = shuffle_positions.slice(0,16);/*16個取り出す*/
                         const targetIndex = hasTarget ? Math.floor(Math.random()*16) : -1;
 
-                        const displayWidth  = 25.39 * px_per_deg* scale;
-                        const displayHeight = 19.04 * px_per_deg* scale;
+                        const displayWidth  = 24 * px_per_deg* scale;
+                        const displayHeight = 18 * px_per_deg* scale;
                         const noiseBackground = generateNoiseBackground(displayWidth, displayHeight, 0.4); //ノイズ背景生成
 
                         let html = `<div class="stimulus-container" style="width:${displayWidth}px; height:${displayHeight}px; background-image:url(${noiseBackground}); background-size:cover;">`;
@@ -247,7 +247,4 @@
              jsPsych.run(timeline);
         </script>
     </body>
-
 </html>
-
-
