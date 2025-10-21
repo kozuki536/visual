@@ -248,30 +248,29 @@
                 });
              }
 
-             /*data save*/
-             const save_data = {
-                type : jsPsychPipe,
-                action : "save",
-                experiment_id : "6VlTDkZAkqjx", //自分のID入れる
-                filename : () => {
-                    // survey-html-form のデータから participant_id を取る
-                    const formData = jsPsych.data.get().filter({trial_type: "survey-html-form"}).values();
-                    const id = (formData.length > 0 && formData[0].response)
-                    ? JSON.parse(formData[0].response).participant_id: jsPsych.randomization.randomID(10);
-                    return `${id}.csv`;
-                },
-                data_string : ()=>jsPsych.data.get().csv()
-             };
-             timeline.push(save_data);
-
              /* 全画面表示終了 */
-             /*timeline.push({
+             timeline.push({
                 type : jsPsychFullscreen,
                 fullscreen_mode : false,
                 css_classes: 'background-color',
                 exit_message : '<p>全画面表示を終了します。<br>下のボタンを押してください。</p>',
                 exit_button_label : '全画面表示を終了する',
              });
+             
+             /*data save*/
+             const save_data = {
+                type : jsPsychPipe,
+                action : "save",
+                experiment_id : "6VlTDkZAkqjx", //自分のID入れる
+                filename : () => {
+                    const id = jsPsych.data.get().values()[0].participant_id || jsPsych.randomization.randomID(10);
+                    return `${id}.csv`;
+                },
+                data_string : ()=>jsPsych.data.get().csv()
+             };
+             timeline.push(save_data);
+
+             
 
              /* start */
              jsPsych.run(timeline);
