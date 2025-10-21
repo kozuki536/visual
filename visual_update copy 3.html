@@ -68,7 +68,7 @@
                 type : jsPsychSurveyHtmlForm,
                 preamble: '<p>IDを入力してください</p>',
                 html: '<input type="text" name="participant_id" required>',
-                //css_classes: 'background-color',
+                css_classes: 'background-color',
                 on_finish: function(data){
                     if(data.responses){
                         const responses = JSON.parse(data.responses);
@@ -262,7 +262,7 @@
              timeline.push(save_data);
 
              /* 全画面表示終了 */
-             timeline.push({
+             /*timeline.push({
                 type : jsPsychFullscreen,
                 fullscreen_mode : false,
                 css_classes: 'background-color',
