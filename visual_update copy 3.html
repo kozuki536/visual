@@ -260,7 +260,7 @@
                 action : "save",
                 experiment_id : "6VlTDkZAkqjx", //自分のID入れる
                 filename : () => {
-                    const id = jsPsych.data.get().values()[0].participant_id || jsPsych.randomization.randomID(10);
+                    const id = jsPsych.data.get().values()[0].participant_id;
                     return `${id}.csv`;
                 },
                 data_string : ()=>jsPsych.data.get().csv()
