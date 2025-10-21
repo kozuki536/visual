@@ -31,6 +31,11 @@
                 height: 100%;
                 color: black;
                 cursor: auto; /* カーソルを表示 */
+
+                 display: flex;
+                 justify-content: center; /* 横方向中央 */
+                 align-items: center;     /* 縦方向中央 */
+                 text-align: center;      /* 複数行を中央寄せ */
             }
         </style>
     </head>
@@ -255,6 +260,14 @@
                 data_string : ()=>jsPsych.data.get().csv()
              };
              timeline.push(save_data);
+
+             /* 全画面表示終了 */
+             timeline.push({
+                type : jsPsychFullscreen,
+                fullscreen_mode : false,
+                css_classes: 'background-color',
+                button_label : '全画面表示を終了する',
+             });
 
              /* start */
              jsPsych.run(timeline);
