@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>my experiment</title>
+        <script src="https://unpkg.com/jspsych@8.2.1"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.1.0"></script>
+        <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@2.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-virtual-chinrest@2.0.3"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-fullscreen@2.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
+        <link href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <style>
+            body{
+                background-color: black;
+                color: white;
+                cursor: none; /* カーソルを非表示 */
+            }
+            .stimulus-container{
+                position: relative;
+                /*width: 640px;/*8×80(cellsize)*/
+                /*height: 480px;/*6×80*/
+                margin: 0 auto;
+                background-color: rgb(153, 153, 153);
+            }
+            .background-color{
+                background-color: white;
+                width: 100%;
+                height: 100%;
+                color: black;
+                cursor: auto; /* カーソルを表示 */
+
+                 display: flex;
+                 justify-content: center; /* 横方向中央 */
+                 align-items: center;     /* 縦方向中央 */
+                 text-align: center;      /* 複数行を中央寄せ */
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            /* initialize jsPsych */
+            const jsPsych = initJsPsych({
+                override_safe_mode: true,
+                on_finish: function () {
+                    jsPsych.data.displayData();
+                }
+            });
+
+            //const subject_id = jsPsych.randomization.randomID(10);
+            //const filename = `${subject_id}.csv`;
+
+            const timeline =[];
+            
+            /* 全画面表示 */
+            timeline.push({
+                type: jsPsychFullscreen,
+                fullscreen_mode: true,
+                css_classes: 'background-color',
+                message: '<p>全画面表示に切り替えます。<br>よろしければ下のボタンを押してください。</p>',
+                button_label: '全画面表示に切り替える',
+            });
+
+            /*ID入力*/
+            const get_id = {
+                type : jsPsychSurveyHtmlForm,
+                preamble: '<p>IDを入力してください</p>',
+                html: '<input type="text" name="participant_id" required>',
+                css_classes: 'background-color',
+                on_finish: function(data){
+                    //if(data.responses){
+                        const responses =data.response;
+                        jsPsych.data.addProperties({ participant_id: responses.participant_id });
+                    //}
+                }
+            };
+            timeline.push(get_id);
+
+            /*あごのやつ*/
+            const chinrest = {
+                type : jsPsychVirtualChinrest,
+                adjustment_prompt : `
+                    <p>画像の右下の角をクリックしてドラッグし、</p>
+                    <p>画面にかざしたクレジットカードと同じ大きさになるまで調整してください。</p>
+                    <p>クレジットカードと同じサイズの会員証や運転免許証など、どのカードを使っても構いません。</p>
+                    <p>サイズを調整し終えたら、下のボタンを押してください。</p>
+                `,
+                blindspot_reps : 1,
+                resize_units : "deg",
+                pixels_per_unit : 50, //1度あたりのピクセル数
+                blindspot_prompt : `
+                    <p>あなたが座っている距離をすばやく測定します。</p>
+                    <p>左手をスペースキーに置いてください。</p>
+                    <p>右手で、右目を覆います。</p>
+                    <p>左目で黒い四角を見つめてください。黒い四角に視線を固定したままにします。</p>
+                    <p>赤いボールが右から左へ動くとき、途中で消えるはずです。ボールが消えた瞬間にスペースキーを押してください。</p>
+                    <p>準備ができたら、スペースキーを押してください。</p>
+                `,
+                css_classes: 'background-color',
+                on_finish: function(data){
+                    jsPsych.data.addProperties({
+                        px_per_deg: data.px_per_unit
+                    });
+                    
+                }
+            };
+            timeline.push(chinrest);
+
+            /* preload images */
+            const preload = {
+                type : jsPsychPreload,
+                images: ['img/target_T.png', 'img/distractor_L.png']
+            };
+            timeline.push(preload);
+
+            /* welcome message */
+            timeline.push({
+                type : jsPsychHtmlKeyboardResponse,
+                stimulus: '<p style="font-size: 25px;">準備ができたら適当なキーを押してください</p>',
+            });
+
+            /* instructions */
+            timeline.push({
+                type: jsPsychHtmlKeyboardResponse,
+                stimulus: `
+                <p style="font-size: 25px;">「T」があったら「F」キーを、なければ「J」キーを押してください</p>
+                <p style="font-size: 25px;">できるだけ早く、正確に反応してください</p>
+                <p style="font-size: 25px;">任意のキーで開始します。</p>
+                `,
+                post_trial_gap: 2000
+            });
+            
+            /* fixation cross with background */
+            const scale = 1; /*80%に縮小*/
+
+            function FixationStimulus(){
+                const px_per_deg = jsPsych.data.get().filter({trial_type:"virtual-chinrest"}).values[0]?.px_per_unit || 50;
+                const sizepx = 0.5 * px_per_deg * scale; /*先行研究が0.32度*/
+                const width = 20 * px_per_deg* scale;
+                const height = 15 * px_per_deg* scale;
+
+                return`
+                <div class="stimulus-container" style="width:${width}px; height:${height}px;">
+                    <div style="font-size:${sizepx}px; color:gray; position: absolute; top: 50%; Left: 50%; transform: translate(-50%, -50%);">+</div>
+                    </div>
+                `;    
+            }
+
+            const fixation = {
+                type: jsPsychHtmlKeyboardResponse,
+                stimulus : FixationStimulus,
+                choices: "NO-KEYS",
+                trial_duration: 1000
+            };
+            //timeline.push(fixation);
+            
+
+            /*ノイズの追加*/
+            function generateNoiseBackground(width, height, density = 0.4){
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                const numNoisePixels = Math.round(width * height * density);
+
+                for(let i = 0; i < numNoisePixels; i++){
+                    const x = Math.floor(Math.random() * width);
+                    const y = Math.floor(Math.random() * height);
+                    const color = Math.random() < 0.5 ? 0 : 255; // クロか白をランダムに選ぶ
+                    ctx.fillStyle = `rgb(${color}, ${color}, ${color})`;
+                    ctx.fillRect(x, y, 1.4, 1.4); // 1.4x1.4ピクセルを塗る
+                }
+                return canvas.toDataURL();
+            }
+
+            // Tがある試行36回、ない試行36回、合計72試行
+            const trialList = [];
+            for(let i = 0; i < 36; i++){
+                trialList.push({hasTarget : true});
+                trialList.push({hasTarget : false});
+            }
+            // 順番をシャッフル
+            const shuffledTrials = jsPsych.randomization.shuffle(trialList);
+
+             /* stimulus display */
+             for(let i = 0 ; i < shuffledTrials.length; i++){
+                const hasTarget = shuffledTrials[i].hasTarget; //Tがあるかないかを表してる？
+
+                timeline.push(fixation);
+
+                timeline.push({
+                    type : jsPsychHtmlKeyboardResponse,
+                    stimulus : function(){
+                        const px_per_deg = jsPsych.data.get().last(1).values()[0].px_per_deg || 50;
+                        //論文の値
+                        const stimSizeDeg = 0.75;
+                        const cellSizeDeg = 2.5;
+                        const jitterSizeDeg = 0.79;
+
+                        //pxに変換
+                        const stimSizePx = stimSizeDeg * px_per_deg* scale;
+                        const cellSizePx = cellSizeDeg * px_per_deg* scale;
+                        const jitterSizePx = jitterSizeDeg * px_per_deg* scale;
+
+                        const cols = 8;//縦画面分割数
+                        const rows = 6;//横画面分割数
+
+                        const valid_positions = [];
+                        
+                        /*中央の4マス除外*/
+                        const center_row = Math.floor(rows/2);
+                        const center_col = Math.floor(cols/2);
+                        for(let row =0; row < rows; row++){
+                            for(let col =0; col < cols; col++){
+                                const isCenter = (col === center_col || col === center_col -1) && /*4列めと3列め*/
+                                                 (row === center_row || row === center_row -1); /*3行めと2行め*/
+                                if(!isCenter){ /*!は反対という意味*/
+                                    valid_positions.push([col,row]);
+                                }
+                            }
+                        }
+
+                        const shuffle_positions = jsPsych.randomization.shuffle(valid_positions);
+                        const selected_positions = shuffle_positions.slice(0,16);/*16個取り出す*/
+                        const targetIndex = hasTarget ? Math.floor(Math.random()*16) : -1;
+
+                        const displayWidth  = 20 * px_per_deg* scale;
+                        const displayHeight = 15 * px_per_deg* scale;
+                        const noiseBackground = generateNoiseBackground(displayWidth, displayHeight, 0.4); //ノイズ背景生成
+
+                        let html = `<div class="stimulus-container" style="width:${displayWidth}px; height:${displayHeight}px; background-image:url(${noiseBackground}); background-size:cover;">`;
+
+                        for(let j = 0; j < 16; j++){
+                            const [col, row] = selected_positions[j];
+                            /*var col = selected_positions[j][0];j番目の横位置を取り出す*/
+                            /*var row = selected_positions[j][1];j番目の縦位置*/
+                            
+                            const x = col * cellSizePx + (cellSizePx - stimSizePx)/2 + (Math.random()*2 *jitterSizePx-jitterSizePx);
+                            const y = row * cellSizePx + (cellSizePx - stimSizePx)/2 + (Math.random()*2 *jitterSizePx-jitterSizePx);
+                            const angle = [0,90,180,270][Math.floor(Math.random()*4)];
+                            const img = (j === targetIndex) ? 'img/target_T.png' : 'img/distractor_L.png';
+
+                            html +=  `<img src="${img}" style="position:absolute; width:${stimSizePx}px; height:${stimSizePx}px; left:${x}px; top:${y}px; transform:rotate(${angle}deg); transform-origin:center;">`;
+
+                        }
+                        html += '</div>';
+                        return html;
+
+                    },
+                    choices : ['f','j'],
+                    trial_duration: 10000,
+                    //10秒間反応を待つ
+                    data : {
+                        hasTarget : hasTarget,
+                        correct_response : hasTarget ? 'f':'j'
+                    },
+                    on_finish (data){
+                        data.correct = data.response === data.correct_response;
+                    }
+                });
+             }
+
+
+             /* 全画面表示終了 */
+             timeline.push({
+                type : jsPsychFullscreen,
+                fullscreen_mode : false,
+             });
+
+             /*data save*/
+             const save_data = {
+                type : jsPsychPipe,
+                action : "save",
+                experiment_id : "6VlTDkZAkqjx", //自分のID入れる
+                filename : () => {
+                    const id = jsPsych.data.get().values()[0].participant_id || jsPsych.randomization.randomID(10);
+                    return `${id}_onON.json`;
+                },
+                data_string : ()=>jsPsych.data.get().json()
+             };
+             timeline.push(save_data);
+
+             
+
+             /* start */
+             jsPsych.run(timeline);
+        </script>
+    </body>
+</html>
