@@ -68,7 +68,7 @@
                 type : jsPsychSurveyHtmlForm,
                 preamble: '<p>IDを入力してください</p>',
                 html: '<input type="text" name="participant_id" required>',
-                css_classes: 'background-color',
+                //css_classes: 'background-color',
                 on_finish: function(data){
                     if(data.responses){
                         const responses = JSON.parse(data.responses);
@@ -254,9 +254,7 @@
                 action : "save",
                 experiment_id : "6VlTDkZAkqjx", //自分のID入れる
                 filename : () => {
-                    const allData = jsPsych.data.get().values();
-                    const idEntry = allData.find(d => d.participant_id);
-                    const id = idEntry ? idEntry.participant_id : jsPsych.randomization.randomID(10);
+                    const id = jsPsych.data.get().values()[0].participant_id || jsPsych.randomization.randomID(10);
                     return `${id}.csv`;
                 },
                 data_string : ()=>jsPsych.data.get().csv()
