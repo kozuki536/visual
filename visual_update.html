@@ -9,6 +9,8 @@
         <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@2.1.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-virtual-chinrest@2.0.3"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-fullscreen@2.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
         <link href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css" rel="stylesheet" type="text/css" />
         <style>
             body{
@@ -25,6 +27,8 @@
             }
             .background-color{
                 background-color: white;
+                width: 100%;
+                height: 100%;
                 color: black;
                 cursor: auto; /* カーソルを表示 */
             }
@@ -44,6 +48,15 @@
             //const filename = `${subject_id}.csv`;
 
             const timeline =[];
+            
+            /* 全画面表示 */
+            timeline.push({
+                type: jsPsychFullscreen,
+                fullscreen_mode: true,
+                css_classes: 'background-color',
+                message: '<p>全画面表示に切り替えます。<br>よろしければ下のボタンを押してください。</p>',
+                button_label: '全画面表示に切り替える',
+            });
 
             /*ID入力*/
             const get_id = {
@@ -63,7 +76,7 @@
             /*あごのやつ*/
             const chinrest = {
                 type : jsPsychVirtualChinrest,
-                blindspot_reps : 3,
+                blindspot_reps : 1,
                 resize_units : "deg",
                 pixels_per_unit : 50, //1度あたりのピクセル数
                 css_classes: 'background-color',
@@ -106,8 +119,8 @@
             function FixationStimulus(){
                 const px_per_deg = jsPsych.data.get().filter({trial_type:"virtual-chinrest"}).values[0]?.px_per_unit || 50;
                 const sizepx = 0.5 * px_per_deg * scale; /*先行研究が0.32度*/
-                const width = 24 * px_per_deg* scale;
-                const height = 18 * px_per_deg* scale;
+                const width = 20 * px_per_deg* scale;
+                const height = 15 * px_per_deg* scale;
 
                 return`
                 <div class="stimulus-container" style="width:${width}px; height:${height}px;">
@@ -136,9 +149,9 @@
                 for(let i = 0; i < numNoisePixels; i++){
                     const x = Math.floor(Math.random() * width);
                     const y = Math.floor(Math.random() * height);
-                    const color = 0; // 色の明るさを調整
+                    const color = Math.random() < 0.5 ? 0 : 255; // クロか白をランダムに選ぶ
                     ctx.fillStyle = `rgb(${color}, ${color}, ${color})`;
-                    ctx.fillRect(x, y, 1, 1);
+                    ctx.fillRect(x, y, 1.4, 1.4); // 1.4x1.4ピクセルを塗る
                 }
                 return canvas.toDataURL();
             }
@@ -163,8 +176,8 @@
                     stimulus : function(){
                         const px_per_deg = jsPsych.data.get().last(1).values()[0].px_per_deg || 50;
                         //論文の値
-                        const stimSizeDeg = 0.90;
-                        const cellSizeDeg = 3;
+                        const stimSizeDeg = 0.75;
+                        const cellSizeDeg = 2.5;
                         const jitterSizeDeg = 0.79;
 
                         //pxに変換
@@ -194,8 +207,8 @@
                         const selected_positions = shuffle_positions.slice(0,16);/*16個取り出す*/
                         const targetIndex = hasTarget ? Math.floor(Math.random()*16) : -1;
 
-                        const displayWidth  = 24 * px_per_deg* scale;
-                        const displayHeight = 18 * px_per_deg* scale;
+                        const displayWidth  = 20 * px_per_deg* scale;
+                        const displayHeight = 15 * px_per_deg* scale;
                         const noiseBackground = generateNoiseBackground(displayWidth, displayHeight, 0.4); //ノイズ背景生成
 
                         let html = `<div class="stimulus-container" style="width:${displayWidth}px; height:${displayHeight}px; background-image:url(${noiseBackground}); background-size:cover;">`;
