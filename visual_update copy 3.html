@@ -70,10 +70,10 @@
                 html: '<input type="text" name="participant_id" required>',
                 css_classes: 'background-color',
                 on_finish: function(data){
-                    if(data.responses){
+                    /*if(data.responses){
                         const responses = JSON.parse(data.responses);
                         jsPsych.data.addProperties({ participant_id: responses.participant_id });
-                    }
+                    }*/
                 }
             };
             timeline.push(get_id);
