@@ -254,7 +254,10 @@
                 action : "save",
                 experiment_id : "6VlTDkZAkqjx", //自分のID入れる
                 filename : () => {
-                    const id = jsPsych.data.get().values()[0].participant_id || jsPsych.randomization.randomID(10);
+                    // survey-html-form のデータから participant_id を取る
+                    const formData = jsPsych.data.get().filter({trial_type: "survey-html-form"}).values();
+                    const id = (formData.length > 0 && formData[0].response)
+                    ? JSON.parse(formData[0].response).participant_id: jsPsych.randomization.randomID(10);
                     return `${id}.csv`;
                 },
                 data_string : ()=>jsPsych.data.get().csv()
