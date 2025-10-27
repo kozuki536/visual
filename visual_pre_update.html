@@ -64,7 +64,7 @@
             });
 
             /*ID入力*/
-            const get_id = {
+            /*const get_id = {
                 type : jsPsychSurveyHtmlForm,
                 preamble: '<p>IDを入力してください</p>',
                 html: '<input type="text" name="participant_id" required>',
@@ -76,7 +76,7 @@
                     //}
                 }
             };
-            timeline.push(get_id);
+            timeline.push(get_id);*/
 
             /*あごのやつ*/
             const chinrest = {
@@ -87,7 +87,7 @@
                     <p>クレジットカードと同じサイズの会員証や運転免許証など、どのカードを使っても構いません。</p>
                     <p>サイズを調整し終えたら、下のボタンを押してください。</p>
                 `,
-                blindspot_reps : 3,
+                blindspot_reps : 1,
                 resize_units : "deg",
                 pixels_per_unit : 50, //1度あたりのピクセル数
                 blindspot_prompt : `
@@ -177,7 +177,7 @@
 
             // Tがある試行36回、ない試行36回、合計72試行
             const trialList = [];
-            for(let i = 0; i < 36; i++){
+            for(let i = 0; i < 9; i++){
                 trialList.push({hasTarget : true});
                 trialList.push({hasTarget : false});
             }
@@ -248,7 +248,7 @@
                         html += '</div>';
                         return html;
 
-                    },
+                    }(hasTarget),
                     choices : ['f','j'],
                     trial_duration: 10000,
                     //10秒間反応を待つ
@@ -260,8 +260,18 @@
                         data.correct = data.response === data.correct_response;
                     }
                 });
-             }
+                 timeline.push({
+                    type : jsPsychHtmlKeyboardResponse,
+                    stimulus : function(){
+                        const lastTrial = jsPsych.data.get().last(1).values()[0];
+                        const correct = lastTrial.correct;
+                        return correct ? "<p style = 'font-size:25px;'>correct</p>" : "<p style ='font-size:25px;'>miss</p>";
 
+                    },
+                    choices : "NO-KEYS",
+                    trial_duration : 1000,
+                });
+             }
 
              /* 全画面表示終了 */
              timeline.push({
@@ -270,17 +280,17 @@
              });
 
              /*data save*/
-             const save_data = {
+             /*const save_data = {
                 type : jsPsychPipe,
                 action : "save",
                 experiment_id : "6VlTDkZAkqjx", //自分のID入れる
                 filename : () => {
                     const id = jsPsych.data.get().values()[0].participant_id || jsPsych.randomization.randomID(10);
-                    return `${id}_offOFF.json`;
+                    return `${id}_onON.json`;
                 },
                 data_string : ()=>jsPsych.data.get().json()
              };
-             timeline.push(save_data);
+             timeline.push(save_data);*/
 
              
 
