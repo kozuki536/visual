@@ -177,7 +177,7 @@
 
             // Tがある試行36回、ない試行36回、合計72試行
             const trialList = [];
-            for(let i = 0; i < 9; i++){
+            for(let i = 0; i < 36; i++){
                 trialList.push({hasTarget : true});
                 trialList.push({hasTarget : false});
             }
@@ -277,7 +277,7 @@
                     const id = jsPsych.data.get().values()[0].participant_id || jsPsych.randomization.randomID(10);
                     return `${id}_onON.json`;
                 },
-                data_string : ()=>jsPsych.data.get().json()
+                data_string : ()=>jsPsych.data.get().ignore('stimulus').json()
              };
              timeline.push(save_data);
 
