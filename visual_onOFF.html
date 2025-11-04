@@ -280,7 +280,7 @@
                     const id = jsPsych.data.get().values()[0].participant_id || jsPsych.randomization.randomID(10);
                     return `${id}_onOFF.json`;
                 },
-                data_string : ()=>jsPsych.data.get().json()
+                data_string : ()=>jsPsych.data.get().ignore('stimulus').json()
              };
              timeline.push(save_data);
 
