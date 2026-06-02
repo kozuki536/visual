@@ -138,7 +138,7 @@
             const scale = 1; 
 
             function FixationStimulus(){
-                const px_per_deg = jsPsych.data.get().filter({trial_type:"virtual-chinrest"}).values[0]?.px_per_unit || 50;
+                const px_per_deg = jsPsych.data.get().filter({trial_type:"virtual-chinrest"}).values()[0]?.px_per_unit || 50;
                 const sizepx = 0.5 * px_per_deg * scale; //先行研究が0.32度
                 const width = 20 * px_per_deg* scale;
                 const height = 15 * px_per_deg* scale;
@@ -216,7 +216,7 @@
                 timeline.push({
                     type : jsPsychHtmlKeyboardResponse,
                     stimulus : function(){
-                        const px_per_deg = jsPsych.data.get().last(1).values()[0].px_per_deg || 50;
+                        const px_per_deg = jsPsych.data.get().filter({trial_type:"virtual-chinrest"}).values()[0]?.px_per_unit || 50;
                         //論文の値
                         const stimSizeDeg = 0.75;
                         const cellSizeDeg = 2.5;
@@ -299,8 +299,15 @@
                     type : jsPsychHtmlKeyboardResponse,
                     stimulus : function(){
                         const lastTrial = jsPsych.data.get().last(1).values()[0];
+                        const px_per_deg = jsPsych.data.get().filter({trial_type:"virtual-chinrest"}).values()[0]?.px_per_unit || 50;
+                        const displayWidth = 20 * px_per_deg;
+                        const displayHeight = 15 * px_per_deg;
                         const correct = lastTrial.correct;
-                        return correct ? "<p style = 'font-size:30px;'>correct</p>" : "<p style ='font-size:30px;'>miss</p>";
+                        return `<div class="stimulus-container" style="width:${displayWidth}px; height:${displayHeight}px;">
+                                    <div style="font-size: 40px; color:black; position: absolute; top: 50%; Left: 50%; transform: translate(-50%, -50%);">
+                                        ${correct ? '正解' : '不正解'}
+                                    </div>
+                                </div>`;
 
                     },
                     choices : "NO-KEYS",
@@ -321,7 +328,7 @@
                 experiment_id : "6VlTDkZAkqjx", //自分のID入れる
                 filename : () => {
                     const id = jsPsych.data.get().values()[0].participant_id || jsPsych.randomization.randomID(10);
-                    return `${id}_ariON.json`;
+                    return `${id}_1_ariON.json`;
                 },
                 data_string : ()=>jsPsych.data.get().ignore('stimulus').json()
              };
