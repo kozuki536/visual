@@ -297,12 +297,11 @@
                 });
                  timeline.push({
                     type : jsPsychHtmlKeyboardResponse,
+                    css_classes: 'background-color',
                     stimulus : function(){
                         const lastTrial = jsPsych.data.get().last(1).values()[0];
                         const correct = lastTrial.correct;
-                        return `<div style="background-color:white; width:100%; height:100%; color:black; display:flex; justify-content:center; align-items:center; font-size:30px;">
-                                ${correct ? '正解！' : '不正解！'}
-                                </div>`;
+                        return correct ? '<p style="font-size: 40px; color:black;">正解</p>' : '<p style="font-size: 40px; color:black;">不正解</p>';
 
                     },
                     choices : "NO-KEYS",
