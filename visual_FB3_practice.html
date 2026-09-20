@@ -128,13 +128,14 @@
                 type: jsPsychHtmlKeyboardResponse,
                 stimulus: `
                 <p style="font-size: 25px;">
-                    <span style="font-size: 35px; display: inline-block; transform: rotate(90deg);">T</span>のとき「←」キーを、
-                    <span style="font-size: 35px; display: inline-block; transform: rotate(-90deg);">T</span>のとき「→」キーを押してください
+                    <span style="font-size: 35px; display: inline-block; width: 50px; text-align: center; transform: rotate(90deg);">T</span>のとき「←」キーを、
+                    <span style="font-size: 35px; display: inline-block; width: 50px; text-align: center; transform: rotate(-90deg);">T</span>のとき「→」キーを押してください
                     </p>
                     <p style="font-size: 25px;">できるだけ早く、正確に反応してください</p>
                     <p style="font-size: 25px;">任意のキーで開始します。</p>
-                `,
-                post_trial_gap: 2000
+                    `,
+                    post_trial_gap: 2000
+
             });
             
             /* fixation cross with background */
@@ -342,7 +343,7 @@
                 text-align:center;
                 font-size:32px;
             ">
-                <p>${correct ? '正解' : '不正解'}</p>
+                <p style="color: ${correct ? 'red' : 'blue'};">${correct ? '正解' : '不正解'}</p>            
                 <p>今回の反応時間：${currentRT} 秒</p>
                 <p>平均反応時間：${meanRT} 秒</p>
             </div>
@@ -351,7 +352,7 @@
     },
 
     choices : "NO-KEYS",
-    trial_duration : 2000,
+    trial_duration : 1500,
 });
              }
 
