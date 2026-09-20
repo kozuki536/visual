@@ -127,9 +127,12 @@
             timeline.push({
                 type: jsPsychHtmlKeyboardResponse,
                 stimulus: `
-                <p style="font-size: 25px;">「T」が左向きのとき「←」キーを、右向きのとき「→」キーを押してください</p>
-                <p style="font-size: 25px;">できるだけ早く、正確に反応してください</p>
-                <p style="font-size: 25px;">任意のキーで開始します。</p>
+                <p style="font-size: 25px;">
+                    <span style="font-size: 35px; display: inline-block; transform: rotate(90deg);">T</span>のとき「←」キーを、
+                    <span style="font-size: 35px; display: inline-block; transform: rotate(-90deg);">T</span>のとき「→」キーを押してください
+                    </p>
+                    <p style="font-size: 25px;">できるだけ早く、正確に反応してください</p>
+                    <p style="font-size: 25px;">任意のキーで開始します。</p>
                 `,
                 post_trial_gap: 2000
             });
