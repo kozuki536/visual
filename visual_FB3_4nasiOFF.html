@@ -42,29 +42,28 @@
     <body>
         <script>
             /* initialize jsPsych */
-            let participant_id = "";
-            const jsPsych = initJsPsych({
-                override_safe_mode: true,
-
-                extensions: [{
-                    type: jsPsychExtensionPipe, 
-                    params: {
-                        format: "json",
-                        experiment_id: "FpkcUBmDdinR", //自分のID入れる
-                        filename: () => {
-                            const id = participant_id || jsPsych.randomization.randomID(10);
-                            return `${id}_4nasiOFF.json`;
-                        },
-                        data_string: () => jsPsych.data.get().ignore('stimulus').json()
-                    }
-                }],
-                on_finish: function () {
-                    jsPsych.data.displayData();
+           // 入力された氏名を受け取る変数
+           let participant_name = "";
+           const jsPsych = initJsPsych({
+            override_safe_mode: true,
+            extensions: [{
+                type: jsPsychExtensionPipe,
+                params: {
+                    experiment_id: "FpkcUBmDdinR", // Google Drive用の実験ID
+                    filename: () => {
+                        if (!participant_name) {
+                            throw new Error("氏名がまだ入力されていません");
+                        }
+                        return `${participant_name}_4nasiOFF.json`;
+                    },
+                    format: "json",
+                    data_string: () =>jsPsych.data.get().ignore("stimulus").json()
                 }
-            });
-
-            //const subject_id = jsPsych.randomization.randomID(10);
-            //const filename = `${subject_id}.csv`;
+            }],
+            on_finish: function () {
+                jsPsych.data.displayData();
+            }
+        });
 
             const timeline =[];
             
@@ -79,20 +78,18 @@
 
             /*ID入力*//*必要*/
             const get_id = {
-                type : jsPsychSurveyHtmlForm,
+                type: jsPsychSurveyHtmlForm,
                 preamble: '<p>氏名を入力してください</p>',
                 html: '<input type="text" name="participant_id" required>',
                 css_classes: 'background-color',
-                on_finish: function(data){
-                    //if(data.responses){
-                        participant_id = data.response.participant_id.trim();
-
-                        jsPsych.data.addProperties({ participant_id: responses.participant_id });
-                    //}
+                on_finish: function(data) {
+                    participant_name = data.response.participant_id.trim();
+                    jsPsych.data.addProperties({
+                        participant_id: participant_name
+                    });
                 }
             };
             timeline.push(get_id);
-
             /*あごのやつ*/
             const chinrest = {
                 type : jsPsychVirtualChinrest,
