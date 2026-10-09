@@ -5,7 +5,7 @@
         <script src="https://unpkg.com/jspsych@8.2.1"></script>
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.1.0"></script>
-        <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe"></script>
+        <script src="https://unpkg.com/@jspsych/extension-pipe@0.2.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@2.1.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-virtual-chinrest@2.0.3"></script>
@@ -42,8 +42,22 @@
     <body>
         <script>
             /* initialize jsPsych */
+            let participant_id = "";
             const jsPsych = initJsPsych({
                 override_safe_mode: true,
+
+                extensions: [{
+                    type: jsPsychExtensionPipe, 
+                    params: {
+                        format: "json",
+                        experiment_id: "FpkcUBmDdinR", //自分のID入れる
+                        filename: () => {
+                            const id = participant_id || jsPsych.randomization.randomID(10);
+                            return `${id}_4nasiOFF.json`;
+                        },
+                        data_string: () => jsPsych.data.get().ignore('stimulus').json()
+                    }
+                }],
                 on_finish: function () {
                     jsPsych.data.displayData();
                 }
@@ -71,7 +85,8 @@
                 css_classes: 'background-color',
                 on_finish: function(data){
                     //if(data.responses){
-                        const responses =data.response;
+                        participant_id = data.response.participant_id.trim();
+
                         jsPsych.data.addProperties({ participant_id: responses.participant_id });
                     //}
                 }
@@ -148,7 +163,7 @@
 
                 return`
                 <div class="stimulus-container" style="width:${width}px; height:${height}px;">
-                    <div style="font-size:${sizepx}px; color:black; position: absolute; top: 50%; Left: 50%; transform: translate(-50%, -50%);">+</div>
+                    <div style="font-size:${sizepx}px; color:black; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">+</div>
                     </div>
                 `;    
             }
@@ -156,7 +171,7 @@
             const fixation = {
                 type: jsPsychHtmlKeyboardResponse,
                 stimulus : FixationStimulus,
-                choices: "NO-KEYS",
+                choices: "NO_KEYS",
                 trial_duration: 1000
             };
             //timeline.push(fixation);
@@ -302,7 +317,7 @@
                 const fixation1 = {
                 type: jsPsychHtmlKeyboardResponse,
                 stimulus : FixationStimulus,
-                choices: "NO-KEYS",
+                choices: "NO_KEYS",
                 trial_duration: 1500
                 };
                 timeline.push(fixation1);
@@ -314,7 +329,7 @@
                         return correct ? "<p style = 'font-size:25px;'>correct</p>" : "<p style ='font-size:25px;'>miss</p>";
 
                     },
-                    choices : "NO-KEYS",
+                    choices : "NO_KEYS",
                     trial_duration : 1000,
                 });*/
              }
@@ -326,7 +341,7 @@
              });
 
              /*data save*/
-             const save_data = {
+             /*const save_data = {
                 type : jsPsychPipe,
                 action : "save",
                 experiment_id : "FpkcUBmDdinR", //自分のID入れる
