@@ -53,7 +53,7 @@
                             if (!participant_name) {
                                 throw new Error("氏名がまだ入力されていません");
                             }
-                            return `${participant_name}_4nasiOFF.json`;
+                            return `${participant_name}_2nasiON.json`;
                         },
                         format: "json",
                         data_string: () =>jsPsych.data.get().ignore("stimulus").json()
