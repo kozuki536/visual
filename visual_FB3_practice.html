@@ -5,7 +5,7 @@
         <script src="https://unpkg.com/jspsych@8.2.1"></script>
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.1.0"></script>
-        <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe"></script>
+        <script src="https://unpkg.com/@jspsych/extension-pipe@0.2.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@2.1.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-virtual-chinrest@2.0.3"></script>
@@ -88,7 +88,7 @@
                     <p>サイズを調整し終えたら、下のボタンを押してください。</p>
                 `,
                 adjustment_button_prompt : 'サイズが合ったら、このボタンを押してください。',
-                blindspot_reps : 3,
+                blindspot_reps : 1,
                 resize_units : "deg",
                 pixels_per_unit : 50, //1度あたりのピクセル数
                 blindspot_prompt : `
@@ -157,7 +157,7 @@
             const fixation = {
                 type: jsPsychHtmlKeyboardResponse,
                 stimulus : FixationStimulus,
-                choices: "NO-KEYS",
+                choices: "NO_KEYS",
                 trial_duration: 1000
             };
             //timeline.push(fixation);
@@ -351,7 +351,7 @@
         </div>`;
     },
 
-    choices : "NO-KEYS",
+    choices : "NO_KEYS",
     trial_duration : 1500,
 });
              }
